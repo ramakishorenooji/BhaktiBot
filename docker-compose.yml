@@ -1,0 +1,35 @@
+version: "3.8"
+
+services:
+  web:
+    build: .
+    container_name: festival_wisher_api
+    ports:
+      - "8000:8000"
+    depends_on:
+      - redis
+    environment:
+      - TWILIO_SID=${TWILIO_SID}
+      - TWILIO_AUTH_TOKEN=${TWILIO_AUTH_TOKEN}
+      - OPENAI_API_KEY=${OPENAI_API_KEY}
+    restart: always
+
+  redis:
+    image: redis:alpine
+    container_name: festival_wisher_redis
+    ports:
+      - "6379:6379"
+    restart: always
+
+  worker:
+    build:
+      context: .
+      dockerfile: Dockerfile.celery
+    container_name: festival_wisher_worker
+    depends_on:
+      - redis
+    environment:
+      - TWILIO_SID=${TWILIO_SID}
+      - TWILIO_AUTH_TOKEN=${TWILIO_AUTH_TOKEN}
+      - OPENAI_API_KEY=${OPENAI_API_KEY}
+    restart: always

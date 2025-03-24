@@ -1,0 +1,10 @@
+fastapi
+uvicorn
+celery
+redis
+requests
+twilio
+openai==0.28
+pytz
+apscheduler
+python-dotenv
